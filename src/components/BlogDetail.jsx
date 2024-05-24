@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { rootUrl } from "../ApiRoot";
 import { useDispatch } from "react-redux";
 import { singlefetchBlogApi } from "../store/states/blog/BlogReducer";
@@ -10,13 +10,13 @@ const BlogDetail = () => {
   const dispatch = useDispatch();
   const fetchBlog = async () => {
     try {
-        const res = await dispatch(singlefetchBlogApi(id));
-        const result = res.payload; // Directly access the payload
-        setBlog(result.blog);
+      const res = await dispatch(singlefetchBlogApi(id));
+      const result = res.payload;
+      setBlog(result.blog);
     } catch (error) {
-        console.error("Error fetching the blog:", error);
+      console.error("Error fetching the blog:", error);
     }
-};
+  };
   useEffect(() => {
     fetchBlog();
   }, []);
@@ -27,9 +27,9 @@ const BlogDetail = () => {
         <div className="d-flex justify-content-between pt-5 mb-4">
           <h2>{blog.title}</h2>
           <div>
-            <a href="/" className="btn btn-dark">
+            <Link to="/blogs" className="btn btn-dark">
               Back to Blog
-            </a>
+            </Link>
           </div>
         </div>
         <div className="row">
@@ -39,7 +39,7 @@ const BlogDetail = () => {
             </p>
 
             {blog.image && (
-              <img 
+              <img
                 style={{
                   width: "100%",
                   maxWidth: "500px",

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Editor from "react-simple-wysiwyg";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -25,7 +25,7 @@ function CreateBlog() {
       const res = await dispatch(AddImageBlogApi(formData));
       console.log(res);
       if (!res?.payload?.status) {
-        const result = res.payload; // Access payload directly
+        const result = res.payload;
         if (result && result.errors && result.errors.image) {
           toast.error(result.errors.image);
         } else {
@@ -33,7 +33,7 @@ function CreateBlog() {
         }
         e.target.value = null;
       } else {
-        const result = res.payload; // Access payload directly
+        const result = res.payload;
         const imageId = result.image.name;
         setImageId(imageId);
         toast.success("Image uploaded successfully.");
@@ -63,7 +63,7 @@ function CreateBlog() {
 
       if (res?.payload?.status) {
         toast.success("Blog added successfully");
-        navigate("/");
+        navigate("/blogs");
       } else {
         toast.error(res.payload?.message || "Failed to add blog");
       }
@@ -76,9 +76,9 @@ function CreateBlog() {
     <div className="container mb-4">
       <div className="d-flex justify-content-between pt-5 mb-4">
         <h4>Create Blog</h4>
-        <a href="/" className="btn btn-dark">
+        <Link to="/blogs" className="btn btn-dark">
           Back
-        </a>
+        </Link>
       </div>
 
       <div className="card border-0 shadow-lg">

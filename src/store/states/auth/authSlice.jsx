@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { apiUrl } from "../../../ApiRoot";
+import { apiUrl } from "../../../ApiRoot"; // Replace with your actual API root URL
 
 const initialState = {
-  isAuthenticated: !!sessionStorage.getItem("token"),
+  isAuthenticated: !! sessionStorage.getItem("token"),
 };
 
 export const loginUser = createAsyncThunk("auth/login", async (data) => {
@@ -20,7 +20,6 @@ export const loginUser = createAsyncThunk("auth/login", async (data) => {
   }
 });
 
-// // Logout a user
 export const logoutUser = createAsyncThunk("auth/logout", async () => {
   try {
     const token = sessionStorage.getItem("token");
@@ -38,6 +37,7 @@ export const logoutUser = createAsyncThunk("auth/logout", async () => {
     throw error.response?.data?.message;
   }
 });
+
 const authSlice = createSlice({
   name: "auth",
   initialState,

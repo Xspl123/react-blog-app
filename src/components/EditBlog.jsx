@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import Editor from "react-simple-wysiwyg";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -48,28 +48,6 @@ function EditBlog() {
     formState: { errors },
   } = useForm();
 
-  // const formSubmit = async (data) => {
-  //   data.description = html;
-  //   data.image_id = imageId;
-
-  //   const res = await fetch(`${apiUrl}updateBlog/${id}`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(data),
-  //   });
-
-  //   if (res.ok) {
-  //     toast.success("Blog updated successfully");
-  //     navigate("/");
-  //   } else {
-  //     const errorData = await res.json();
-  //     toast.error(errorData.message || "Failed to update blog");
-  //   }
-  // };
-
-
   const formSubmit = async (data) => {
     data.description = html;
     data.image_id = imageId;
@@ -78,7 +56,7 @@ function EditBlog() {
       const resultAction = await dispatch(upDateBlogApiData({ data, id })).unwrap();
       if (resultAction) {
         toast.success("Blog updated successfully");
-        navigate("/");
+        navigate("/blogs");
       }
     } catch (error) {
       toast.error(error.message || "Failed to update blog");
@@ -111,9 +89,9 @@ function EditBlog() {
     <div className="container mb-4">
       <div className="d-flex justify-content-between pt-5 mb-4">
         <h4>Edit Blog</h4>
-        <a href="/" className="btn btn-dark">
+        <Link to="/blogs" className="btn btn-dark">
           Back
-        </a>
+        </Link>
       </div>
 
       <div className="card border-0 shadow-lg">

@@ -25,7 +25,7 @@ function Login() {
       console.log("ssss", result);
       if (result.payload) {
         toast.success('User login successfully');
-        navigate('/');
+        navigate('/blogs');
       } else {
         setApiError(result.error.message);
         toast.error(result.error.message);
