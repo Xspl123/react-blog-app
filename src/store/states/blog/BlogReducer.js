@@ -98,40 +98,6 @@ export const RegisterUser = createAsyncThunk("auth/register", async (data) => {
   }
 });
 
-// // Login a user
-// export const LoginUser = createAsyncThunk("auth/login", async (data) => {
-//   try {
-//     const resp = await axios.post(`${apiUrl}login`, data);
-//     const token = resp?.data?.token;
-//     if (token) {
-//       sessionStorage.setItem("token", token);
-//     }
-//     return resp?.data;
-//   } catch (error) {
-//     console.error("Login failed", error);
-//     throw error.response?.data?.message
-//   }
-// });
-
-// // Logout a user
-// export const logOutUser = createAsyncThunk("auth/logout", async () => {
-//   try {
-//     const token = sessionStorage.getItem("token");
-//     const config = {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//         "Content-Type": "application/json",
-//       },
-//     };
-//     const resp = await axios.post(`${apiUrl}logout`, {}, config);
-//     sessionStorage.removeItem("token");
-//     return resp?.data;
-//   } catch (error) {
-//     console.error("Logout failed", error);
-//     throw error.response?.data?.message;
-//   }
-// });
-
 // Update blog
 export const upDateBlogApiData = createAsyncThunk(
   "blogs/update",
@@ -149,6 +115,26 @@ export const upDateBlogApiData = createAsyncThunk(
     } catch (error) {
       console.error("Blog update failed", error);
       throw error.response?.data?.message;
+    }
+  }
+);
+
+// Delete blog
+export const DeleteBlogApiData = createAsyncThunk(
+  "blogs/delete",
+  async (id) => {
+        try {
+      const token = sessionStorage.getItem("token");   
+      const resp = await axios.delete(`${apiUrl}blog-delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Accept": "application/json",
+        },
+      });
+      return resp?.data;
+    } catch (error) {
+      console.error("Blog delete failed", error);
+      return error.response?.data?.message;
     }
   }
 );

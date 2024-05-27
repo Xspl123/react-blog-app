@@ -57,9 +57,14 @@ const BlogDetail = () => {
           <div
             className="col-12 py-5 w-50"
             dangerouslySetInnerHTML={{ __html: blog.description }}
-          ></div>
-        </div>
+          >
+          </div>
+          
       </div>
+      <button type="submit" className=" btn btn-dark">
+              Delete
+            </button>
+        </div>
     </div>
   );
 };
