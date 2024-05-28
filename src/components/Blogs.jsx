@@ -3,7 +3,7 @@ import { fetchBlogApi, DeleteBlogApiData } from "../store/states/blog/BlogReduce
 import { useDispatch, useSelector } from "react-redux";
 import { rootUrl } from "../ApiRoot";
 import { Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import {toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Blogs() {
@@ -58,7 +58,6 @@ function Blogs() {
 
   return (
     <div className="container">
-      <ToastContainer />
       <div className="d-flex justify-content-between pt-5 mb-4">
         <h4>Blogs</h4>
         <Link to="/createblog" className="btn btn-dark">

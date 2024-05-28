@@ -11,6 +11,7 @@ import Register from "./auth/Register";
 import { useDispatch,useSelector } from "react-redux";
 import { logoutUser } from "./store/states/auth/authSlice";
 import PrivateRoute from "./components/PrivateRoute";
+import Random from "./components/Random";
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -66,6 +67,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/basicSelect" element={<Random />} />
         <Route
           path="/blogs"
           element={

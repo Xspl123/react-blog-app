@@ -18,11 +18,8 @@ function Login() {
   } = useForm();
 
   const formSubmit = async (data) => {
-    console.log('Form submission data:', data);
-
     try {
       const result = await  dispatch(loginUser(data))
-      console.log("ssss", result);
       if (result.payload) {
         toast.success('User login successfully');
         navigate('/blogs');
