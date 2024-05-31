@@ -9,6 +9,26 @@ const initialState = {
   error: null,
 };
 
+//Search Blog By Title
+
+// Fetch all blogs
+export const SearchBlogApi = createAsyncThunk("blogs/Search", async (searchTerm) => {
+  try {
+    const token = sessionStorage.getItem("token");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+    const resp = await axios.get(`${apiUrl}searchBlog?${searchTerm}=`, config);
+    return resp?.data;
+  } catch (error) {
+    console.error("Fetching blogs failed", error);
+    throw error.response?.data?.message;
+  }
+});
+
 // Fetch all blogs
 export const fetchBlogApi = createAsyncThunk("blogs/fetchAll", async () => {
   try {
@@ -156,11 +176,7 @@ const Blogs = createSlice({
       .addCase(singlefetchBlogApi.fulfilled, (state, action) => {
         state.singleblogsFetchData = action.payload;
       })
-      // .addCase(logOutUser.fulfilled, (state) => {
-      //   state.blogsFetchData = [];
-      //   state.singleblogsFetchData = [];
-      //   state.status = "idle";
-      // })
+   
       .addMatcher(
         (action) => action.type.endsWith("/pending"),
         (state) => {
