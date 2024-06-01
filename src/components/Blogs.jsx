@@ -60,6 +60,9 @@ function Blogs() {
   const handleSearch = async () => {
     setLoading(true);
     try {
+      const data={
+        title:searchTerm
+      }
       const res = await dispatch(SearchBlogApi(data));
       console.log("Search result:", res);
     } catch (error) {

@@ -12,20 +12,40 @@ const initialState = {
 //Search Blog By Title
 
 // Fetch all blogs
-export const SearchBlogApi = createAsyncThunk("blogs/Search", async (searchTerm) => {
+export const SearchBlogApi = createAsyncThunk("blogs/Search", async (data, { rejectWithValue }) => {
   try {
+    // Retrieve the token from session storage
     const token = sessionStorage.getItem("token");
+
+    // If the token does not exist, reject the request
+    if (!token) {
+      return rejectWithValue("No token found in session storage");
+    }
+
+    // Configure the request headers
     const config = {
+      params: data, 
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
-      },
+      }
     };
-    const resp = await axios.get(`${apiUrl}searchBlog?${searchTerm}=`, config);
+
+    // Make the GET request to the blog search endpoint
+    const resp = await axios.get(`${apiUrl}blog/search`, config);
+    
+    // Return the response data
     return resp?.data;
   } catch (error) {
     console.error("Fetching blogs failed", error);
-    throw error.response?.data?.message;
+    
+    // If there is an error response, reject with the error message
+    if (error.response && error.response.data && error.response.data.message) {
+      return rejectWithValue(error.response.data.message);
+    }
+
+    // Otherwise, reject with a generic error message
+    return rejectWithValue("An error occurred while fetching blogs");
   }
 });
 
@@ -173,6 +193,11 @@ const Blogs = createSlice({
       .addCase(fetchBlogApi.fulfilled, (state, action) => {
         state.blogsFetchData = action.payload;
       })
+
+      .addCase(SearchBlogApi.fulfilled, (state, action) => {
+        state.blogsFetchData = action.payload;
+      })
+      
       .addCase(singlefetchBlogApi.fulfilled, (state, action) => {
         state.singleblogsFetchData = action.payload;
       })
