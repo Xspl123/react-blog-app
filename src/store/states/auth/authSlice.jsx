@@ -10,8 +10,12 @@ export const loginUser = createAsyncThunk("auth/login", async (data) => {
   try {
     const resp = await axios.post(`${apiUrl}login`, data);
     const token = resp?.data?.token;
+    const userName = resp?.data?.user?.name;
     if (token) {
       sessionStorage.setItem("token", token);
+    }
+    if (userName) {
+      sessionStorage.setItem("userName", userName);
     }
     return resp?.data;
   } catch (error) {
@@ -23,14 +27,24 @@ export const loginUser = createAsyncThunk("auth/login", async (data) => {
 export const logoutUser = createAsyncThunk("auth/logout", async () => {
   try {
     const token = sessionStorage.getItem("token");
+    const userName = sessionStorage.getItem("userName");
+    
+    
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     };
+
+    // Optionally, you can include the userName in the request or log it
+    console.log(`Logging out user: ${userName}`);
+
     const resp = await axios.post(`${apiUrl}logout`, {}, config);
+
     sessionStorage.removeItem("token");
+    sessionStorage.removeItem("userName");
+
     return resp?.data;
   } catch (error) {
     console.error("Logout failed", error);
