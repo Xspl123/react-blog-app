@@ -5,13 +5,51 @@ import { apiUrl } from "../../../ApiRoot";
 const initialState = {
   blogsFetchData: [],
   singleblogsFetchData: [],
+  fetchBlogCommentData: [],
+  SearchBlogApi:[],
   status: "idle",
   error: null,
 };
 
-//Search Blog By Title
+// Fetch a Blog  comment by ID
+export const fetchBlogComment = createAsyncThunk(
+  "blogs/fetchBlogc",
+  async (id) => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      };
+      const resp = await axios.get(`${apiUrl}blog/comments/${id}`,config);
+      return resp?.data;
+    } catch (error) {
+      console.error("Fetching single blog failed", error);
+      throw error.response?.data?.message;
+    }
+  }
+);
+// Create a new blog
+export const AddBlogComment = createAsyncThunk("blogs/addComment", async (data) => {
+  try {
+    const token = sessionStorage.getItem("token");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+    const resp = await axios.post(`${apiUrl}blog/comment`, data, config);
+    return resp?.data;
+  } catch (error) {
+    console.error("Blog creation failed", error);
+    throw error.response?.data?.message;
+  }
+});
 
-// Fetch all blogs
+//Search Blog By Title
 export const SearchBlogApi = createAsyncThunk("blogs/Search", async (data, { rejectWithValue }) => {
   try {
     // Retrieve the token from session storage
@@ -200,6 +238,10 @@ const Blogs = createSlice({
       
       .addCase(singlefetchBlogApi.fulfilled, (state, action) => {
         state.singleblogsFetchData = action.payload;
+      })
+
+      .addCase(fetchBlogComment.fulfilled, (state, action) => {
+        state.fetchBlogCommentData = action.payload;
       })
    
       .addMatcher(

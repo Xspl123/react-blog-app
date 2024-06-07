@@ -61,9 +61,6 @@ const BlogDetail = () => {
           </div>
           
       </div>
-      <button type="submit" className=" btn btn-dark">
-              Delete
-            </button>
         </div>
     </div>
   );
