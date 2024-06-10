@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { format } from 'date-fns';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -12,83 +13,7 @@ import {
   fetchBlogComment,
 } from "../store/states/blog/BlogReducer";
 import { rootUrl } from "../ApiRoot";
-
-const styles = {
-  commentPopup: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    background: "rgba(0, 0, 0, 0.5)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  popupContent: {
-    background: "white",
-    padding: "20px",
-    borderRadius: "5px",
-    width: "300px",
-    position: "relative",
-  },
-  btnClose: {
-    position: "absolute",
-    top: "10px",
-    right: "10px",
-    background: "none",
-    border: "none",
-    fontSize: "20px",
-    cursor: "pointer",
-  },
-  iconButton: {
-    backgroundColor: "transparent",
-    border: "none",
-    cursor: "pointer",
-    color: "black",
-    marginLeft: "8px",
-    marginTop: "18px",
-    display: "flex",
-    alignItems: "center",
-  },
-};
-const styles1 = {
-  commentList: {
-    listStyleType: "none",
-    padding: 0,
-    margin: 0,
-  },
-  commentCard: {
-    marginBottom: "15px",
-    borderRadius: "5px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    backgroundColor: "#fff",
-    padding: "15px",
-  },
-  cardContent: {
-    fontSize: "16px",
-    lineHeight: "1.5",
-  },
-};
-
-const styles2 = {
-  commentContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  commentCount: {
-    marginBottom: '5px',
-    fontSize: '14px',
-    fontWeight: 'bold',
-  },
-  commentButton: {
-    padding: '0',
-    fontSize: '16px',
-    // Additional button styles if needed
-  },
-};
-
+import "./Blogs.css";
 
 function Blogs() {
   const [loading, setLoading] = useState(false);
@@ -159,6 +84,7 @@ function Blogs() {
   const handleCommentClick = (id) => {
     setCurrentBlogId(id);
     setShowCommentPopup(true);
+    fetchBlogData();
   };
 
   const handleCommentSubmit = async () => {
@@ -199,7 +125,8 @@ function Blogs() {
     fetchBlogData();
   }, [dispatch, currentBlogId]);
 
-  console.log("sss", currentBlogId);
+  console.log("sss", fetchBlogCommentData?.fetchBlogCommentData);
+  
   return (
     <div className="container">
       <div className="d-flex justify-content-between pt-5 mb-4">
@@ -253,8 +180,8 @@ function Blogs() {
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
+                        width="30"
+                        height="30"
                         fill="currentColor"
                         className="bi bi-pencil"
                         viewBox="0 0 16 16"
@@ -268,8 +195,8 @@ function Blogs() {
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
+                        width="30"
+                        height="30"
                         fill="currentColor"
                         className="bi bi-trash"
                         viewBox="0 0 16 16"
@@ -278,15 +205,18 @@ function Blogs() {
                         <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
                       </svg>
                     </button>
-                    <span>{item.comment_count}</span>
+                    <span className="commentCountSpan">
+                      {item.comment_count}
+                    </span>
+
                     <button
                       className="btn btn-link text-dark me-2 p-0"
                       onClick={() => handleCommentClick(item.id)}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
+                        width="30"
+                        height="30"
                         fill="currentColor"
                         className="bi bi-chat"
                         viewBox="0 0 16 16"
@@ -302,8 +232,8 @@ function Blogs() {
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
+                        width="20"
+                        height="30"
                         fill="currentColor"
                         className="bi bi-heart"
                         viewBox="0 0 16 16"
@@ -319,25 +249,37 @@ function Blogs() {
       </div>
 
       {showCommentPopup && (
-        <div style={styles.commentPopup}>
-          <div style={styles.popupContent}>
-            <button onClick={closeCommentPopup} style={styles.btnClose}>
+        <div className="commentPopup">
+          <div className="popupContent">
+            <button onClick={closeCommentPopup} className="btnClose">
               &times;
             </button>
             <h5>Comments</h5>
-            <ul style={styles1.commentList}>
+            <ul className="commentList">
               {fetchBlogCommentData?.fetchBlogCommentData?.comments.map(
                 (comment) => (
-                  <li key={comment.id} style={styles.commentCard}>
-                    <div style={styles.cardContent}>
+                  <li key={comment.id} className="commentCard">
+                    <div className="cardContent">
+                      <div>
                       <p>{comment.content}</p>
+                      </div>
+                      
+                      <br></br>
+                      
+                      
+                      <div style={{ float:'left' }}>
+                      <p>{comment.created_at}</p>
+                      </div>
+                      <div style={{ float:'right' }}>
+                      <p>{comment.user_name}</p>
+                      </div>
+                      
+                      
                     </div>
                   </li>
                 )
               )}
             </ul>
-
-            <h5>Add a Comment</h5>
             <div className="input-group mb-2">
               <textarea
                 value={comment}
@@ -346,7 +288,7 @@ function Blogs() {
                 className="form-control"
               />
               <div className="input-group-append">
-                <button onClick={handleCommentSubmit} style={styles.iconButton}>
+                <button onClick={handleCommentSubmit} className="iconButton">
                   <i className="fas fa-paper-plane"></i>
                 </button>
               </div>
