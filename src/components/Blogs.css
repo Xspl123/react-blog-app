@@ -81,8 +81,9 @@
   }
   
   .commentCountSpan {
-    position: absolute;
-    right: 53px;
+    right: 103px;
+    
+    color: red;
     font-size: 13px;
   }
   
@@ -95,4 +96,7 @@
 }
 ::-webkit-scrollbar-thumb {
     background: #e9ecef;
+}
+.css-1y942vo-MuiButtonBase-root-MuiButton-root{
+  min-width: 0px !important;
 }

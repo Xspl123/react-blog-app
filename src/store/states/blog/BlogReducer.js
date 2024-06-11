@@ -11,6 +11,27 @@ const initialState = {
   error: null,
 };
 
+
+// Add Like a Blog
+export const addLike = createAsyncThunk(
+  "blogs/addLike",
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const response = await axios.post(`${apiUrl}blog/likes/${id}`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Adding like failed", error);
+      return rejectWithValue(error.response?.data?.message || "An error occurred");
+    }
+  }
+);
+
 // Fetch a Blog  comment by ID
 export const fetchBlogComment = createAsyncThunk(
   "blogs/fetchBlogc",
