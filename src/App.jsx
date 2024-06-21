@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "./store/states/auth/authSlice";
 import PrivateRoute from "./components/PrivateRoute";
 import Random from "./components/Random";
+import PhotoGallery from "./components/PhotoGallery";
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -43,7 +44,7 @@ function App() {
   return (
     <>
       <div className="bg-dark text-center py-2 shadow-lg">
-        <ul className="nav justify-content-end">
+        <ul className="nav d-flex bd-highlight mb-3">
           {!isAuthenticated && (
             <>
               <li className="nav-item">
@@ -60,10 +61,17 @@ function App() {
           )}
           {isAuthenticated && (
             <>
-              <li className="nav-item ml-auto text-white">
+            
+            <li className="nav-item ml-auto me-auto p-2 bd-highlight">
+                <Link to="/photo-gallery" className="nav-link text-white">
+                  Photo Gallery
+                </Link>
+              </li>
+
+              <li className="nav-item ml-auto text-white text-end p-2 bd-highlight">
                 <h6 style={{ paddingTop: "11px" }}>Welcome To {userName}</h6>
               </li>
-              <li className="nav-item ml-auto">
+              <li className="nav-item ml-auto p-2 bd-highlight">
                 <Link
                   to="/"
                   className="nav-link text-white"
@@ -77,18 +85,22 @@ function App() {
                   )}
                 </Link>
               </li>
+              
             </>
+            
           )}
         </ul>
-        {/* <div className="ml-auto text-right">
-    <h4 className="text-white">React Laravel Blog App</h4>
-  </div> */}
       </div>
 
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/basicSelect" element={<Random />} />
+        <Route path="/photo-gallery" element={
+          <PrivateRoute>
+          <PhotoGallery />
+        </PrivateRoute>
+        } />
+        
         <Route
           path="/blogs"
           element={

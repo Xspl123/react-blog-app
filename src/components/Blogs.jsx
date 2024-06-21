@@ -143,11 +143,14 @@ function Blogs() {
   };
 
   useEffect(() => {
-    dispatch(fetchBlogApi());
-    fetchBlogData();
+    const interval = setInterval(() => {
+      dispatch(fetchBlogApi());
+      fetchBlogData(); 
+    }, 5000); // Change interval to 5000 milliseconds (5 seconds)
+  
+    return () => clearInterval(interval);
   }, [dispatch, currentBlogId]);
-
-  console.log("sss", blogsData.blogsFetchData.blogs);
+  
 
   return (
     <div className="container">
